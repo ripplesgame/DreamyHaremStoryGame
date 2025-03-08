@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>梦幻后宫物语</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f2f5;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+
+        .header {
+            background: #ff69b4;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .resources {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .resource {
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .characters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .character {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .character img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+
+        .progress {
+            width: 100%;
+            height: 20px;
+            background: #eee;
+            border-radius: 10px;
+            margin: 5px 0;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: #ff69b4;
+            border-radius: 10px;
+            transition: width 0.3s;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        button {
+            background: #ff69b4;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #ff1493;
+        }
+
+        .shop,
+        .achievements,
+        .events {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .location-selector {
+            margin-bottom: 20px;
+            padding: 10px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 600px) {
+            .characters {
+                grid-template-columns: 1fr;
+            }
+
+            .buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>梦幻后宫物语</h1>
+            <p>在线时间: <span id="playTime">0</span>秒</p>
+        </div>
+
+        <div class="resources">
+            <div class="resource">
+                <h3>金币</h3>
+                <p id="gold">0</p>
+            </div>
+            <div class="resource">
+                <h3>声望</h3>
+                <p id="reputation">0</p>
+            </div>
+            <div class="resource">
+                <h3>魅力</h3>
+                <p id="charm">0</p>
+            </div>
+        </div>
+
+        <div class="location-selector">
+            <h2>当前位置</h2>
+            <select id="location" onchange="changeLocation()">
+                <option value="mansion">豪华公寓</option>
+                <option value="park">城市公园</option>
+                <option value="cafe">咖啡厅</option>
+                <option value="mall">购物中心</option>
+                <option value="beach">海滩</option>
+            </select>
+        </div>
+
+        <div class="characters">
+            <div class="character" id="char1">
+                <h3>苏娆音（秘书）</h3>
+                <img src="./image/mishu.png" alt="樱花雪">
+                <div class="progress">
+                    <div class="progress-bar" style="width: 0%"></div>
+                </div>
+                <p>好感度: <span class="affection">0</span></p>
+                <p>事业等级: <span class="career">1</span></p>
+                <button onclick="interact(0)">互动</button>
+                <button onclick="train(0)">培养</button>
+            </div>
+            <div class="character" id="char2">
+                <h3>林衔月（画家）</h3>
+                <img src="./image/huajia.png" alt="月光蓝">
+                <div class="progress">
+                    <div class="progress-bar" style="width: 0%"></div>
+                </div>
+                <p>好感度: <span class="affection">0</span></p>
+                <p>事业等级: <span class="career">1</span></p>
+                <button onclick="interact(1)">互动</button>
+                <button onclick="train(1)">培养</button>
+            </div>
+            <div class="character" id="char3">
+                <h3>叶灼绯（歌手）</h3>
+                <img src="./image/geshou.png" alt="星辰紫">
+                <div class="progress">
+                    <div class="progress-bar" style="width: 0%"></div>
+                </div>
+                <p>好感度: <span class="affection">0</span></p>
+                <p>事业等级: <span class="career">1</span></p>
+                <button onclick="interact(2)">互动</button>
+                <button onclick="train(2)">培养</button>
+            </div>
+            <div class="character" id="char4">
+                <h3>虞浸霓（医生）</h3>
+                <img src="./image/yisheng.png" alt="翡翠绿">
+                <div class="progress">
+                    <div class="progress-bar" style="width: 0%"></div>
+                </div>
+                <p>好感度: <span class="affection">0</span></p>
+                <p>事业等级: <span class="career">1</span></p>
+                <button onclick="interact(3)">互动</button>
+                <button onclick="train(3)">培养</button>
+            </div>
+            <div class="character" id="char5">
+                <h3>江欲晚（企业家）</h3>
+                <img src="./image/qiyejia.png" alt="琥珀金">
+                <div class="progress">
+                    <div class="progress-bar" style="width: 0%"></div>
+                </div>
+                <p>好感度: <span class="affection">0</span></p>
+                <p>事业等级: <span class="career">1</span></p>
+                <button onclick="interact(4)">互动</button>
+                <button onclick="train(4)">培养</button>
+            </div>
+        </div>
+
+        <div class="shop">
+            <h2>商店</h2>
+            <button onclick="buyItem('gift')">购买礼物 (100金币)</button>
+            <button onclick="buyItem('book')">购买技能书 (200金币)</button>
+            <button onclick="buyItem('jewelry')">购买珠宝 (500金币)</button>
+        </div>
+
+        <div class="achievements">
+            <h2>成就系统</h2>
+            <div id="achievementsList"></div>
+        </div>
+
+        <div class="events">
+            <h2>最近事件</h2>
+            <div id="eventLog"></div>
+        </div>
+    </div>
+
+    <div style="position: fixed; right: 2%; top: 20px;">
+        <div onclick="gotoPage('https://ripplesgame.github.io/GameHome/')"
+            style="margin: 10px 0; line-height:24px;width:50px; height: 24px;border: 1px solid #e6d5c3; background-color: #c7b299; color: #ffffff; text-align: center;border-radius: 5px;cursor: pointer;">
+            更多</div>
+        <div onclick="gotoPage('https://ripplesgame.github.io/GameShop/26581/baodan.html')"
+            style="line-height:24px;width:50px;height: 24px;border: 1px solid #e6d5c3; background-color: #c7b299; color: #ffffff; text-align: center;border-radius: 5px;cursor: pointer;">
+            商店</div>
+    </div>
+
+    <script>
+        // 游戏数据
+        let gameData = {
+            gold: 0,
+            reputation: 0,
+            charm: 0,
+            playTime: 0,
+            characters: [
+                { name: "苏娆音", affection: 0, career: 1, events: ["加班", "项目汇报", "职场晋升"] },
+                { name: "林衔月", affection: 0, career: 1, events: ["画展", "创作灵感", "艺术交流"] },
+                { name: "叶灼绯", affection: 0, career: 1, events: ["演唱会", "新歌发布", "粉丝见面会"] },
+                { name: "虞浸霓", affection: 0, career: 1, events: ["手术", "医学研究", "义诊活动"] },
+                { name: "江欲晚", affection: 0, career: 1, events: ["商业谈判", "公司上市", "慈善活动"] }
+            ],
+            achievements: [
+                { name: "初识", description: "与一位角色好感度达到10", completed: false },
+                { name: "魅力四射", description: "魅力值达到100", completed: false },
+                { name: "富甲一方", description: "获得1000金币", completed: false },
+                { name: "后宫之主", description: "所有角色好感度达到50", completed: false },
+                { name: "商业帝国", description: "所有角色事业等级达到5", completed: false }
+            ],
+            currentLocation: "mansion",
+            lastSaveTime: new Date().getTime()
+        };
+
+        // 本地存储功能
+        function saveGame() {
+            gameData.lastSaveTime = new Date().getTime();
+            localStorage.setItem('dreamyHaremSave', JSON.stringify(gameData));
+            addEventLog("游戏已自动保存！");
+        }
+
+        function loadGame() {
+            const savedData = localStorage.getItem('dreamyHaremSave');
+            if (savedData) {
+                try {
+                    const parsedData = JSON.parse(savedData);
+                    gameData = parsedData;
+                    addEventLog("游戏存档已加载！");
+                    updateUI();
+                    // 更新位置选择器
+                    document.getElementById('location').value = gameData.currentLocation;
+                } catch (e) {
+                    addEventLog("存档加载失败！");
+                }
+            }
+        }
+
+        function resetGame() {
+            if (confirm("确定要重置游戏吗？所有进度将丢失！")) {
+                localStorage.removeItem('dreamyHaremSave');
+                location.reload();
+            }
+        }
+
+        // 添加重置游戏按钮到界面
+        const header = document.querySelector('.header');
+        const resetButton = document.createElement('button');
+        resetButton.textContent = "重置游戏";
+        resetButton.style.marginTop = "10px";
+        resetButton.onclick = resetGame;
+        header.appendChild(resetButton);
+
+        // 随机事件系统
+        const events = [
+            { name: "意外之财", effect: () => { gameData.gold += 100; return "你意外获得了100金币！"; } },
+            { name: "形象提升", effect: () => { gameData.charm += 10; return "你的穿着打扮获得了赞赏，魅力+10！"; } },
+            { name: "商业机会", effect: () => { gameData.reputation += 20; return "你抓住了一个商业机会，声望+20！"; } },
+            {
+                name: "偶然相遇", effect: () => {
+                    const charIndex = Math.floor(Math.random() * 5);
+                    gameData.characters[charIndex].affection += 5;
+                    return `你在街上偶遇了${gameData.characters[charIndex].name}，好感度+5！`;
+                }
+            },
+            {
+                name: "慈善活动", effect: () => {
+                    gameData.gold -= 50;
+                    gameData.reputation += 30;
+                    return "参加慈善活动，失去50金币，获得30声望！";
+                }
+            },
+            {
+                name: "才艺表演", effect: () => {
+                    gameData.charm += 15;
+                    gameData.reputation += 10;
+                    return "你的才艺表演获得好评，魅力+15，声望+10！";
+                }
+            },
+            {
+                name: "商业危机", effect: () => {
+                    gameData.reputation -= 20;
+                    return "遭遇商业危机，声望-20！";
+                }
+            },
+            {
+                name: "幸运日", effect: () => {
+                    gameData.gold += 50;
+                    gameData.charm += 5;
+                    gameData.reputation += 5;
+                    return "今天是你的幸运日！各项属性小幅提升！";
+                }
+            }
+        ];
+
+        // 初始化游戏
+        function initGame() {
+            loadGame(); // 加载存档
+            updateUI();
+            setInterval(gameLoop, 1000);
+            setInterval(triggerRandomEvent, 30000);
+            setInterval(saveGame, 60000); // 每分钟自动保存一次
+            checkAchievements();
+        }
+
+        // 游戏主循环
+        function gameLoop() {
+            gameData.playTime++;
+            gameData.gold += 1;
+            updateUI();
+        }
+
+        // 更新界面
+        function updateUI() {
+            document.getElementById('playTime').textContent = gameData.playTime;
+            document.getElementById('gold').textContent = gameData.gold;
+            document.getElementById('reputation').textContent = gameData.reputation;
+            document.getElementById('charm').textContent = gameData.charm;
+
+            gameData.characters.forEach((char, index) => {
+                const charElement = document.getElementById(`char${index + 1}`);
+                charElement.querySelector('.affection').textContent = char.affection;
+                charElement.querySelector('.career').textContent = char.career;
+                charElement.querySelector('.progress-bar').style.width = `${char.affection}%`;
+            });
+        }
+
+        // 互动系统
+        function interact(charIndex) {
+            const char = gameData.characters[charIndex];
+            if (gameData.gold >= 10) {
+                gameData.gold -= 10;
+                char.affection += Math.floor(Math.random() * 3) + 1;
+                addEventLog(`与${char.name}互动，好感度上升！`);
+                checkAchievements();
+                updateUI();
+                saveGame(); // 添加保存
+            } else {
+                addEventLog("金币不足，无法互动！");
+            }
+        }
+
+        // 培养系统
+        function train(charIndex) {
+            const char = gameData.characters[charIndex];
+            if (gameData.gold >= 50) {
+                gameData.gold -= 50;
+                char.career += 1;
+                gameData.reputation += 5;
+                addEventLog(`培养${char.name}的事业，等级提升！`);
+                checkAchievements();
+                updateUI();
+                saveGame(); // 添加保存
+            } else {
+                addEventLog("金币不足，无法培养！");
+            }
+        }
+
+        // 商店系统
+        function buyItem(item) {
+            const prices = {
+                gift: 100,
+                book: 200,
+                jewelry: 500
+            };
+
+            if (gameData.gold >= prices[item]) {
+                gameData.gold -= prices[item];
+                switch (item) {
+                    case 'gift':
+                        gameData.charm += 10;
+                        addEventLog("购买礼物，魅力+10！");
+                        break;
+                    case 'book':
+                        gameData.reputation += 20;
+                        addEventLog("购买技能书，声望+20！");
+                        break;
+                    case 'jewelry':
+                        gameData.charm += 30;
+                        gameData.reputation += 30;
+                        addEventLog("购买珠宝，魅力+30，声望+30！");
+                        break;
+                }
+                updateUI();
+                saveGame(); // 添加保存
+            } else {
+                addEventLog("金币不足，无法购买！");
+            }
+        }
+
+        // 随机事件触发器
+        function triggerRandomEvent() {
+            const event = events[Math.floor(Math.random() * events.length)];
+            const result = event.effect();
+            addEventLog(result);
+            updateUI();
+        }
+
+        // 地点系统
+        function changeLocation() {
+            const location = document.getElementById('location').value;
+            gameData.currentLocation = location;
+            addEventLog(`移动到${location}`);
+
+            // 不同地点有不同的收益加成
+            switch (location) {
+                case 'mansion':
+                    gameData.charm += 1;
+                    break;
+                case 'park':
+                    gameData.reputation += 1;
+                    break;
+                case 'cafe':
+                    gameData.gold += 5;
+                    break;
+                case 'mall':
+                    gameData.charm += 2;
+                    break;
+                case 'beach':
+                    gameData.reputation += 2;
+                    break;
+            }
+            updateUI();
+            saveGame(); // 添加保存
+        }
+
+        // 成就系统检查
+        function checkAchievements() {
+            gameData.achievements.forEach(achievement => {
+                if (!achievement.completed) {
+                    switch (achievement.name) {
+                        case "初识":
+                            if (gameData.characters.some(char => char.affection >= 10)) {
+                                completeAchievement(achievement);
+                            }
+                            break;
+                        case "魅力四射":
+                            if (gameData.charm >= 100) {
+                                completeAchievement(achievement);
+                            }
+                            break;
+                        case "富甲一方":
+                            if (gameData.gold >= 1000) {
+                                completeAchievement(achievement);
+                            }
+                            break;
+                        case "后宫之主":
+                            if (gameData.characters.every(char => char.affection >= 50)) {
+                                completeAchievement(achievement);
+                            }
+                            break;
+                        case "商业帝国":
+                            if (gameData.characters.every(char => char.career >= 5)) {
+                                completeAchievement(achievement);
+                            }
+                            break;
+                    }
+                }
+            });
+            updateAchievementsList();
+        }
+
+        // 完成成就
+        function completeAchievement(achievement) {
+            achievement.completed = true;
+            addEventLog(`恭喜获得成就：${achievement.name}！`);
+            gameData.gold += 100;
+            gameData.reputation += 50;
+        }
+
+        // 更新成就列表显示
+        function updateAchievementsList() {
+            const achievementsList = document.getElementById('achievementsList');
+            achievementsList.innerHTML = gameData.achievements.map(achievement =>
+                `<div style="margin: 5px; ${achievement.completed ? 'color: green;' : ''}">
+                    ${achievement.name}: ${achievement.description}
+                    ${achievement.completed ? '✓' : ''}
+                </div>`
+            ).join('');
+        }
+
+        // 添加事件日志
+        function addEventLog(message) {
+            const eventLog = document.getElementById('eventLog');
+            const newEvent = document.createElement('div');
+            newEvent.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            eventLog.insertBefore(newEvent, eventLog.firstChild);
+            if (eventLog.children.length > 5) {
+                eventLog.removeChild(eventLog.lastChild);
+            }
+        }
+
+        // 启动游戏
+        initGame();
+
+
+        function gotoPage(url) {
+            url && window.open(url);
+        }
+    </script>
+</body>
+
+</html>
